@@ -36,3 +36,4 @@ tasks.test {
     // Use junit platform for unit tests.
     useJUnitPlatform()
 }
+

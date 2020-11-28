@@ -1,51 +1,29 @@
 package positionlot.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class ReadString {
 
-    //Deklarasi Variable
+    ClassLoader classLoader = getClass().getClassLoader();
+    String commandString = "";
 
-    FileInputStream fis = null;
-    char[] dataText = new char[2000];
-    char data;
-    int temp, i = 0;
-    String[] splitStr;
+    String[] read(String fileName) {
 
-    public String[] Read(String file_name)
-    {
-        try
-        {
-            fis = new FileInputStream("resources/" + file_name);
-        }catch(FileNotFoundException e)
-        {
-            System.err.println("File Not Found");
+        try (InputStream inputStream = classLoader.getResourceAsStream(fileName);
+             InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             BufferedReader reader = new BufferedReader(streamReader)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                commandString += line + "\n";
+            }
+
+            return commandString.split("\n");
+
+        } catch (IOException e) {
+            throw new NullPointerException();
         }
-
-        try
-        {
-
-            do{
-                temp = fis.read();
-                data = (char) temp;
-                if(temp != -1)
-                {
-                    //System.out.print("" + data);
-                    dataText[i] = data;
-                    i++;
-                }
-            }while(temp != -1);
-
-        }catch(IOException ex)
-        {
-            System.out.println("Problem in reading from the file");
-        }
-
-        String strLine = new String(dataText);
-        splitStr = strLine.split("\n");
-        return splitStr;
     }
 
 }
