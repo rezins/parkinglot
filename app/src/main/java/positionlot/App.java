@@ -3,11 +3,14 @@
  */
 package positionlot;
 
+import positionlot.main.MainClass;
+
 public class App {
 
     public static void main(String[] args) {
 
-        System.out.println("Hallo");
+        MainClass mainClass = new MainClass();
+        mainClass.launch("");
 
     }
 }
