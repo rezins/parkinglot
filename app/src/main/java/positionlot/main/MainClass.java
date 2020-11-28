@@ -6,6 +6,7 @@ import positionlot.util.ReadString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 public class MainClass {
@@ -81,6 +82,19 @@ public class MainClass {
 
                         if (listOfInput.get(0).equals(cmd.list.get(0))) { // If first word command is create_parking_lot
 
+                            //Check if second word is number or not
+                            if(checkIsNumber(listOfInput.get(1))){
+
+                                //The Idea is creating all list with empty attribute
+                                for (int i = 0; i < Integer.parseInt(listOfInput.get(1)); i++) {
+                                    listParking.add(new Lot(i, 0, null, null));
+                                }
+                                System.out.println("Created a parking lot with " + listOfInput.get(1) + " slots");
+
+                            }else{
+                                System.out.println("you must input number");
+                            }
+
 
                         }else if (listOfInput.get(0).equals(cmd.list.get(2))) { // If first word command is leave
 
@@ -106,7 +120,8 @@ public class MainClass {
                             // counter will increase if a Car has been parked
                             if (counter < listParking.size()) {
 
-                                //
+                                //call prod add car to park
+                                addParking(listOfInput);
 
                             } else { // if counter more than park alocated then ..
 
@@ -197,6 +212,26 @@ public class MainClass {
         }
     }
 
+
+    //===================================================== MAIN LOGIC ===================================================
+
+
+    // Add Parking Method, is to set List with Input Car by Command Line
+    private void addParking(List<String> listOfInput) {
+
+        ListIterator<Lot> iterator = listParking.listIterator();
+        while (iterator.hasNext()) {
+            Lot next = iterator.next();
+            if (next.getSlot() == 0) {
+                Lot lot = listParking.get(next.getIndex());
+                listParking.set(next.getIndex(), new Lot(lot.getIndex(), next.getIndex() + 1, listOfInput.get(1), listOfInput.get(2)));
+                counter++;
+                System.out.println("Allocated slot number " + (next.getIndex() + 1));
+                break;
+            }
+        }
+
+    }
 
 
 }
