@@ -11,18 +11,18 @@ import java.util.Scanner;
 
 public class MainClass {
 
-    String args, input;
+    private String args, input;
 
-    boolean start = true, commandValid = false;
+    private boolean start = true, commandValid = false;
 
-    int index = 0, counter = 0, iterasi = 0;
+    private int index = 0, counter = 0, iterasi = 0;
 
     private List<Lot> listParking = new ArrayList<>();
 
-    ReadString r = new ReadString();
-    Command cmd = new Command();
+    private ReadString r = new ReadString();
+    private Command cmd = new Command();
 
-    String[] fileRead;
+    private String[] fileRead;
 
     //Here's main code
     public void launch(String args){
@@ -41,7 +41,12 @@ public class MainClass {
 
         //Cek if using argument or not
         if (!args.equals("")) {
-            fileRead = r.read(args);
+            try {
+                fileRead = r.read(args);
+            }catch (NullPointerException e){
+                System.out.println("File Not Found");
+                fileRead = new String[0];
+            }
         }else{
             fileRead = new String[1];
         }
@@ -150,7 +155,8 @@ public class MainClass {
                             //First Check if Park is created
                             if (checkParkIsCreated()) {
 
-
+                                //print out query
+                                System.out.println(registration_numbers_for_cars_with_colour(listOfInput.get(1)));
 
                             }else { // park is not created
 
@@ -162,7 +168,8 @@ public class MainClass {
                             //First Check if Park is created
                             if (checkParkIsCreated()) {
 
-
+                                //print out query
+                                System.out.println(slot_numbers_for_cars_with_colour(listOfInput.get(1)));
 
                             }else { // park is not created
 
@@ -174,7 +181,8 @@ public class MainClass {
                             //First Check if Park is created
                             if (checkParkIsCreated()) {
 
-
+                                //print out query
+                                System.out.println(slot_number_for_registration_number(listOfInput.get(1)));
 
                             }else { // park is not created
 
@@ -290,7 +298,7 @@ public class MainClass {
 
 
     // Add Parking Method, is to set List with Input Car by Command Line
-    private void addParking(List<String> listOfInput) {
+    void addParking(List<String> listOfInput) {
 
         ListIterator<Lot> iterator = listParking.listIterator();
         while (iterator.hasNext()) {
@@ -307,7 +315,7 @@ public class MainClass {
     }
 
     //Leave car in parking lot
-    private void leave(int slot) {
+    void leave(int slot) {
 
         Lot lot = listParking.get(slot - 1);
         listParking.set(slot - 1, new Lot(lot.getIndex(), 0, null, null));
@@ -315,5 +323,69 @@ public class MainClass {
         System.out.println("Slot number " + slot + " is free");
     }
 
+    //method search regis number with color
+    String registration_numbers_for_cars_with_colour(String color) {
+        String str = "";
+
+        for (Lot lot : listParking) {
+            if (lot.getSlot() != 0) {
+                if (lot.getColor().equals(color)) {
+                    str += lot.getRegister_number() + ", ";
+                }
+            }
+        }
+
+        if (!str.equals("")) {
+            str = str.substring(0, str.length() - 2);
+        } else {
+            str = "Not found";
+        }
+
+        return str;
+    }
+
+    //method slot number with color
+    String slot_numbers_for_cars_with_colour(String color) {
+        String str = "";
+
+        for (Lot lot : listParking) {
+            if (lot.getSlot() != 0) {
+                if (lot.getColor().equals(color)) {
+                    str += lot.getSlot() + ", ";
+                }
+            }
+
+        }
+
+        if (!str.equals("")) {
+            str = str.substring(0, str.length() - 2);
+        } else {
+            str = "Not found";
+        }
+
+        return str;
+    }
+
+    //method slot number
+    String slot_number_for_registration_number(String regis) {
+        String str = "";
+
+        for (Lot lot : listParking) {
+            if (lot.getSlot() != 0) {
+                if (lot.getRegister_number().trim().equals(regis.trim())) {
+                    str += lot.getSlot() + ", ";
+                }
+            }
+
+        }
+
+        if (!str.equals("")) {
+            str = str.substring(0, str.length() - 2);
+        } else {
+            str = "Not found";
+        }
+
+        return str;
+    }
 
 }

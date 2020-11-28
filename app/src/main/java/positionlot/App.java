@@ -10,7 +10,7 @@ public class App {
     public static void main(String[] args) {
 
         MainClass mainClass = new MainClass();
-        mainClass.launch("");
+        mainClass.launch(args.length==0 ? "" : args[0]);
 
     }
 }

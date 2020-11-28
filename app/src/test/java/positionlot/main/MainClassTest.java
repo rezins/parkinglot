@@ -56,4 +56,54 @@ public class MainClassTest {
         assertTrue(tmp, "input is number");
     }
 
+    @Test
+    @DisplayName(value = "Test Slot Number For Registration Number")
+    void slot_number_for_registration_number(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.slot_number_for_registration_number("KA-01-HH-3141");
+        assertTrue(!slotNumber.equals("Not found"), "Slot number exists");
+    }
+
+    @Test
+    @DisplayName(value = "Test Slot Number For Registration Number Not Found")
+    void slot_number_for_registration_number_not_found(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.slot_number_for_registration_number("MH-04-AY-1111");
+        assertTrue(slotNumber.equals("Not found"), "Slot number not found");
+    }
+
+    @Test
+    @DisplayName(value = "Test Slot Number For Cars with Colour")
+    void slot_numbers_for_cars_with_colour(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.slot_numbers_for_cars_with_colour("White");
+        assertTrue(!slotNumber.equals("Not found"), "Slot number exists");
+    }
+
+    @Test
+    @DisplayName(value = "Test Slot Number For Cars with Colour Not Found")
+    void slot_numbers_for_cars_with_colour_not_found(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.slot_numbers_for_cars_with_colour("Green");
+        assertTrue(slotNumber.equals("Not found"), "Slot number not found");
+    }
+
+    @Test
+    @DisplayName(value = "Test Regis Number With color")
+    void testRegisNumberWithColor(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.registration_numbers_for_cars_with_colour("White");
+        assertTrue(!slotNumber.equals("Not found"), "Regis number exists");
+    }
+
+    @Test
+    @DisplayName(value = "Test Regis Number With color Not Found")
+    void testRegisNumberWithColorNotFound(){
+        mainClass.launch("file_input.txt");
+        String slotNumber = mainClass.registration_numbers_for_cars_with_colour("Green");
+        assertTrue(slotNumber.equals("Not found"), "Regis number not found");
+    }
+
+
+
 }
