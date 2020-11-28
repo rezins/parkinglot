@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MainClassTest {
 
-    MainClass mainClass = new MainClass();
+
 
 
 

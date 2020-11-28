@@ -8,7 +8,7 @@ public class ReadString {
     ClassLoader classLoader = getClass().getClassLoader();
     String commandString = "";
 
-    String[] read(String fileName) {
+    public String[] read(String fileName) {
 
         try (InputStream inputStream = classLoader.getResourceAsStream(fileName);
              InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);

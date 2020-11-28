@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Command {
 
-    List<String> list = new ArrayList<>();
+    public List<String> list = new ArrayList<>();
 
     public List<String> getList() {
         return list;
