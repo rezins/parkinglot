@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class MainClass {
 
-    private String args, input;
+    private String args, input, scr;
 
     private boolean start = true, commandValid = false;
 
@@ -21,6 +21,7 @@ public class MainClass {
 
     private ReadString r = new ReadString();
     private Command cmd = new Command();
+    private Scanner scanner = new Scanner(System.in);
 
     private String[] fileRead;
 
@@ -57,184 +58,197 @@ public class MainClass {
             //else using command line by scanner
             if (!args.equals("")) {
                 input = fileRead[iterasi].trim();
+                doRunCommand(input);
             } else {
-                Scanner scanner = new Scanner(System.in);
-                input = scanner.nextLine();
+
+                while(scanner.hasNextLine()){
+                    input=scanner.nextLine();
+                    if(input.equals("exit")){
+                        start = false;
+                        break;
+                    }
+                    doRunCommand(input);
+                }
+                //input = scanner.nextLine();
             }
 
             //check if input equals null or empty string then do not executed
-            if (!input.equals("")) {
 
-                //do parsing command and put into list
-                List<String> listOfInput = parsingCommand(input);
-
-                //check if command is valid
-                commandValid = checkCommand(listOfInput);
-
-                // If command is invalid then print Command Not Found
-                // Else Do Execution command
-                if (!commandValid) {
-                    System.out.println("Command Not Found");
-                }else{
-
-                    //Check If Command is Show Status
-                    if (listOfInput.size() == 1 && listOfInput.get(0).equals(cmd.list.get(3))) {
-
-                        //First Check if Park is created
-                        if (checkParkIsCreated()) {
-
-                            //Call Proc Status Park
-                            showStatusPark();
-
-                        }else { // park is not created
-
-                            System.out.println("Park has not been created.");
-                        }
-
-                    }else if (listOfInput.size() == 2) { // Check if command is Not Status Or Add Car to Park
-
-                        if (listOfInput.get(0).equals(cmd.list.get(0))) { // If first word command is create_parking_lot
-
-                            //Check if second word is number or not
-                            if(checkIsNumber(listOfInput.get(1))){
-
-                                //Check if parking lot is already created
-                                if(listParking.size()==0){
-
-                                    //The Idea is creating all list with empty attribute
-                                    for (int i = 0; i < Integer.parseInt(listOfInput.get(1)); i++) {
-                                        listParking.add(new Lot(i, 0, null, null));
-                                    }
-                                    System.out.println("Created a parking lot with " + listOfInput.get(1) + " slots");
-
-                                }else{
-
-                                    System.out.println("Parking lot is already created");
-
-                                }
-
-                            }else{
-                                System.out.println("you must input number");
-                            }
-
-
-
-                        }else if (listOfInput.get(0).equals(cmd.list.get(2))) { // If first word command is leave
-
-                            //First Check if Park is created
-                            if (checkParkIsCreated()) {
-
-                                //Check if second word is number
-                                if(checkIsNumber(listOfInput.get(1))){
-
-                                    int slotRemove = Integer.parseInt(listOfInput.get(1));
-
-                                    //check if input between 1 and size of parking lot
-                                    if(slotRemove > 0 && slotRemove <= listParking.size()){
-
-                                        leave(slotRemove);
-
-                                    }else{
-
-                                        System.out.println("choose slot between 1 and " + listParking.size());
-
-                                    }
-
-                                }else{
-
-                                    System.out.println("you must input number");
-                                }
-
-                            }else { // park is not created
-
-                                System.out.println("Park has not been created.");
-                            }
-
-                        }else if (listOfInput.get(0).equals(cmd.list.get(4))) { //If first word command is registration_numbers_for_cars_with_colour
-
-                            //First Check if Park is created
-                            if (checkParkIsCreated()) {
-
-                                //print out query
-                                System.out.println(registration_numbers_for_cars_with_colour(listOfInput.get(1)));
-
-                            }else { // park is not created
-
-                                System.out.println("Park has not been created.");
-                            }
-
-                        }else if (listOfInput.get(0).equals(cmd.list.get(5))) { //If first word command is slot_numbers_for_cars_with_colour
-
-                            //First Check if Park is created
-                            if (checkParkIsCreated()) {
-
-                                //print out query
-                                System.out.println(slot_numbers_for_cars_with_colour(listOfInput.get(1)));
-
-                            }else { // park is not created
-
-                                System.out.println("Park has not been created.");
-                            }
-
-                        }else if (listOfInput.get(0).equals(cmd.list.get(6))) { //If first word command is slot_number_for_registration_number
-
-                            //First Check if Park is created
-                            if (checkParkIsCreated()) {
-
-                                //print out query
-                                System.out.println(slot_number_for_registration_number(listOfInput.get(1)));
-
-                            }else { // park is not created
-
-                                System.out.println("Park has not been created.");
-                            }
-
-                        }else { // If first command not in registered
-                            System.out.println("Command Not Recognized");
-                        }
-                    }else if (listOfInput.size() == 3) { // Check if Command is Add Car To Park
-
-                        //First Check if Park is created
-                        if (checkParkIsCreated()) {
-
-                            //I have variable counter for marking size of park
-                            // counter will increase if a Car has been parked
-                            if (counter < listParking.size()) {
-
-                                //call prod add car to park
-                                addParking(listOfInput);
-
-                            } else { // if counter more than park alocated then ..
-
-                                System.out.println("Sorry, parking lot is full");
-
-                            }
-                        } else { // park is not created
-
-                            System.out.println("Park has not been created.");
-                        }
-
-
-                    }else if (listOfInput.size() == 1 && listOfInput.get(0).equals(cmd.list.get(7))) { //Check if command is Exit
-
-                        //Just set variable start to false if want to exit in loop
-                        start = false;
-
-                    }else { // Else for Not Recognized Commnad
-                        System.out.println("Command Not Recognized");
-                    }
-
-                }
-
-
-
-            }
 
             if (!args.equals("")) {
                 iterasi++;
             }
         }
 
+    }
+
+    void doRunCommand(String inputs){
+        if (!inputs.equals("")) {
+
+            //do parsing command and put into list
+            List<String> listOfInput = parsingCommand(inputs);
+
+            //check if command is valid
+            commandValid = checkCommand(listOfInput);
+
+            // If command is invalid then print Command Not Found
+            // Else Do Execution command
+            if (!commandValid) {
+                System.out.println("Command Not Found");
+            }else{
+
+                //Check If Command is Show Status
+                if (listOfInput.size() == 1 && listOfInput.get(0).equals(cmd.list.get(3))) {
+
+                    //First Check if Park is created
+                    if (checkParkIsCreated()) {
+
+                        //Call Proc Status Park
+                        showStatusPark();
+
+                    }else { // park is not created
+
+                        System.out.println("Park has not been created.");
+                    }
+
+                }else if (listOfInput.size() == 2) { // Check if command is Not Status Or Add Car to Park
+
+                    if (listOfInput.get(0).equals(cmd.list.get(0))) { // If first word command is create_parking_lot
+
+                        //Check if second word is number or not
+                        if(checkIsNumber(listOfInput.get(1))){
+
+                            //Check if parking lot is already created
+                            if(listParking.size()==0){
+
+                                //The Idea is creating all list with empty attribute
+                                for (int i = 0; i < Integer.parseInt(listOfInput.get(1)); i++) {
+                                    listParking.add(new Lot(i, 0, null, null));
+                                }
+                                System.out.println("Created a parking lot with " + listOfInput.get(1) + " slots");
+
+                            }else{
+
+                                System.out.println("Parking lot is already created");
+
+                            }
+
+                        }else{
+                            System.out.println("you must input number");
+                        }
+
+
+
+                    }else if (listOfInput.get(0).equals(cmd.list.get(2))) { // If first word command is leave
+
+                        //First Check if Park is created
+                        if (checkParkIsCreated()) {
+
+                            //Check if second word is number
+                            if(checkIsNumber(listOfInput.get(1))){
+
+                                int slotRemove = Integer.parseInt(listOfInput.get(1));
+
+                                //check if input between 1 and size of parking lot
+                                if(slotRemove > 0 && slotRemove <= listParking.size()){
+
+                                    leave(slotRemove);
+
+                                }else{
+
+                                    System.out.println("choose slot between 1 and " + listParking.size());
+
+                                }
+
+                            }else{
+
+                                System.out.println("you must input number");
+                            }
+
+                        }else { // park is not created
+
+                            System.out.println("Park has not been created.");
+                        }
+
+                    }else if (listOfInput.get(0).equals(cmd.list.get(4))) { //If first word command is registration_numbers_for_cars_with_colour
+
+                        //First Check if Park is created
+                        if (checkParkIsCreated()) {
+
+                            //print out query
+                            System.out.println(registration_numbers_for_cars_with_colour(listOfInput.get(1)));
+
+                        }else { // park is not created
+
+                            System.out.println("Park has not been created.");
+                        }
+
+                    }else if (listOfInput.get(0).equals(cmd.list.get(5))) { //If first word command is slot_numbers_for_cars_with_colour
+
+                        //First Check if Park is created
+                        if (checkParkIsCreated()) {
+
+                            //print out query
+                            System.out.println(slot_numbers_for_cars_with_colour(listOfInput.get(1)));
+
+                        }else { // park is not created
+
+                            System.out.println("Park has not been created.");
+                        }
+
+                    }else if (listOfInput.get(0).equals(cmd.list.get(6))) { //If first word command is slot_number_for_registration_number
+
+                        //First Check if Park is created
+                        if (checkParkIsCreated()) {
+
+                            //print out query
+                            System.out.println(slot_number_for_registration_number(listOfInput.get(1)));
+
+                        }else { // park is not created
+
+                            System.out.println("Park has not been created.");
+                        }
+
+                    }else { // If first command not in registered
+                        System.out.println("Command Not Recognized");
+                    }
+                }else if (listOfInput.size() == 3) { // Check if Command is Add Car To Park
+
+                    //First Check if Park is created
+                    if (checkParkIsCreated()) {
+
+                        //I have variable counter for marking size of park
+                        // counter will increase if a Car has been parked
+                        if (counter < listParking.size()) {
+
+                            //call prod add car to park
+                            addParking(listOfInput);
+
+                        } else { // if counter more than park alocated then ..
+
+                            System.out.println("Sorry, parking lot is full");
+
+                        }
+                    } else { // park is not created
+
+                        System.out.println("Park has not been created.");
+                    }
+
+
+                }else if (listOfInput.size() == 1 && listOfInput.get(0).equals(cmd.list.get(7))) { //Check if command is Exit
+
+                    //Just set variable start to false if want to exit in loop
+                    start = false;
+
+                }else { // Else for Not Recognized Commnad
+                    System.out.println("Command Not Recognized");
+                }
+
+            }
+
+
+
+        }
     }
 
     //Function for parsing command with space

@@ -16,6 +16,7 @@ repositories {
     jcenter()
 }
 
+
 dependencies {
     // Use JUnit Jupiter API for testing.
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
@@ -35,5 +36,16 @@ application {
 tasks.test {
     // Use junit platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.getByName<JavaExec>("run") {
+    standardInput = System.`in`
+}
+
+tasks.withType(Jar::class) {
+    manifest {
+        attributes["Manifest-Version"] = "1.0"
+        attributes["Main-Class"] = "App"
+    }
 }
 
