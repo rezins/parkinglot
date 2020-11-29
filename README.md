@@ -1,4 +1,4 @@
-##PARKING LOT INSTRUCTION
+## PARKING LOT INSTRUCTION
 
 ### Functional Suite
 `functional_spec/` 
@@ -40,4 +40,4 @@ Berisi file aplikasi parking lot menggunakan java dengan build-tool gradle. Pada
 - Jalankan `bin/parking_lot` untuk menjalankan program dengan interactive command, jalankan command `exit` untuk memberhentikan program
 - Jalankan `bin/parking_lot file_inputs.txt` untuk menjalankan program dengan parameter `file_input.txt`
 
-#####P.S : Berjalan dengan baik di OS Ubuntu 21.04
+##### P.S : Berjalan dengan baik di OS Ubuntu 21.04
